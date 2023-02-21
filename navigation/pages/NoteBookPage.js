@@ -1,11 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-paper'
+import firebase from "./components/firebaseDB"
+import { getFirestore, collection, getDocs, addDoc, setDoc, deleteDoc, doc } from 'firebase/firestore/lite';
+
 /* import useGlobalStyles from './components/useGlobalStyles' */
 const NoteBookPage = ({ navigation }) => {
     const [counter, setCounter] = useState(0);
     const [notes, setNotes] = useState([]);
     /* const globalStyles = useGlobalStyles(); */
+    const db = getFirestore(firebase);
+
+    useEffect(() => {
+        initializeData();
+    }, [])
+
+
+    async function initializeData() {
+        const notesCol = collection(db, 'notes');
+        const noteSnapshot = await getDocs(notesCol);
+        const noteList = noteSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setNotes([...noteList]);
+    }
+
 
     navigation.setOptions({
         headerRight: () => (
@@ -20,21 +37,36 @@ const NoteBookPage = ({ navigation }) => {
         )
     })
 
-    const addNote = (title, note) => {
-        setNotes([...notes, { id: counter + 1, title, note }]);
-        setCounter(counter + 1);
+    const addNote = async (title, note) => {
+        try {
+            const docRef = await addDoc(collection(db, "notes"), {
+                title: title,
+                note: note
+            });
+            setNotes([...notes, { id: docRef.id, title, note }]);
+            setCounter(counter + 1);
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
     };
 
-    const deleteNote = (id) => {
+
+    const deleteNote = async (id) => {
         setNotes(notes.filter(note => note.id !== id));
+        await deleteDoc(doc(db, "notes", id));
     };
 
-    const editNote = (id, title, note) => {
+    const editNote = async (id, title, note) => {
         let newNotes = [...notes];
         let index = newNotes.findIndex(n => n.id === id);
-        newNotes[index] = { id, title, note };
-        console.log(newNotes)
+        newNotes[index] = { title, note };
         setNotes(newNotes);
+
+        await setDoc(doc(db, "notes", id), {
+            title: title,
+            note: note
+        })
     };
 
     const renderNote = ({ item }) => (
