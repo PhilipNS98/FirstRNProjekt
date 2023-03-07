@@ -18,7 +18,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.PhilipNS98.FirstProject",
+      "config": {
+        "googleMapsApiKey": "AIzaSyAEA_2fZSMcPb1Sm7B8a2J4ysROY3QUetw"
+      }
+      
     },
     "android": {
       "adaptiveIcon": {

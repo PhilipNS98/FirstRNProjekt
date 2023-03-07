@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native
 import { Button } from 'react-native-paper'
 import firebase from "./components/firebaseDB"
 import { getFirestore, collection, getDocs, addDoc, setDoc, deleteDoc, doc } from 'firebase/firestore/lite';
-import FireBaseStorageImage from './components/fireBaseStorageImage';
+import FireBaseStorageImage from './components/FireBaseStorageImage';
 
 /* import useGlobalStyles from './components/useGlobalStyles' */
 const NoteBookPage = ({ navigation }) => {

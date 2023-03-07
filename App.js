@@ -1,4 +1,4 @@
-import Login from './navigation/pages/components/login';
+import Login from './navigation/pages/components/Login.js';
 
 const App = () => {
   return (

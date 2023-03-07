@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Image } from 'react-native';
-import firebase from './firebaseDb';
+import firebase from './firebaseDB';
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 const FirebaseStorageImage = ({ item }) => {
